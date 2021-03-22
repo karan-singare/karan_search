@@ -61,21 +61,25 @@ function karan_search_schema() {
       'tutors_start_time' => array(
         'description' => 'The of the first tutor subscribed.',
         'type' => 'int',
+        'unsigned' => TRUE,
         'default' => 0,
       ),
       'tutors_end_time' => array(
         'description' => 'The expiration date for the subscribed tutors.',
         'type' => 'int',
+        'unsigned' => TRUE,
         'default' => 0,
       ),
       'institutes_start_time' => array(
         'description' => 'The of the first institute subscribed.',
         'type' => 'int',
+        'unsigned' => TRUE,
         'default' => 0,
       ),
       'institutes_end_time' => array(
         'description' => 'The expiration date for the subscribed institutes.',
         'type' => 'int',
+        'unsigned' => TRUE,
         'default' => 0,
       ),
     ),

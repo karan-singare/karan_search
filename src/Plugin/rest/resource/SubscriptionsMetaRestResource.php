@@ -13,17 +13,17 @@ use Drupal\Core\Database\Database;
  * Provides a resource to get view modes by entity and bundle.
  *
  * @RestResource(
- *   id = "subscriptions_rest_resource",
- *   label = @Translation("Subscriptions rest resource"),
+ *   id = "subscriptions_meta_rest_resource",
+ *   label = @Translation("Subscriptions meta rest resource"),
  *   uri_paths = {
- *     "canonical" = "/subscriptions",
- *     "canonical" = "/subscriptions",
- *     "create" = "/subscriptions",
- *     "canonical" = "/subscriptions"
+ *     "canonical" = "/subscriptions-meta",
+ *     "canonical" = "/subscriptions-meta",
+ *     "create" = "/subscriptions-meta",
+ *     "canonical" = "/subscriptions-meta"
  *   }
  * )
  */
-class SubscriptionsRestResource extends ResourceBase {
+class SubscriptionsMetaRestResource extends ResourceBase {
 
   /**
    * A current user instance.
@@ -63,7 +63,6 @@ class SubscriptionsRestResource extends ResourceBase {
 
         $payload = $this->get_record();
 
-
         return new ResourceResponse($payload, 200);
     }
 
@@ -85,7 +84,7 @@ class SubscriptionsRestResource extends ResourceBase {
         if (!$this->currentUser->hasPermission('access content')) {
             throw new AccessDeniedHttpException();
         }
-
+        $payload = $this->update_record($payload);
         return new ModifiedResourceResponse($payload, 201);
     }
 
@@ -130,7 +129,7 @@ class SubscriptionsRestResource extends ResourceBase {
         if (!$this->currentUser->hasPermission('access content')) {
             throw new AccessDeniedHttpException();
         }
-
+        $payload = $this->update_record();
         return new ModifiedResourceResponse($payload, 204);
     }
 
@@ -142,13 +141,13 @@ class SubscriptionsRestResource extends ResourceBase {
       $response = [];
       $connection = $this->get_connection();
 
-      $query = $connection->select('subscriptions', 's')
+      $query = $connection->select('subscriptions_meta', 's')
         ->fields('s')
         ->condition('s.user_id', $this->currentUser->id(), '=');
 
       $data = $query->execute();
       $results = $data->fetchAll(\PDO::FETCH_ASSOC);
-      return $results;
+      return $results[0];
 
     }
 
@@ -160,7 +159,7 @@ class SubscriptionsRestResource extends ResourceBase {
         $fields["$key"] = $value;
       }
 
-      $query = $connection->insert('subscriptions')
+      $query = $connection->insert('subscriptions_meta')
         ->fields($fields)
         ->execute();
 
@@ -172,5 +171,31 @@ class SubscriptionsRestResource extends ResourceBase {
       ];
       return $message;
     }
+    /**
+     * Helper method for patch requests
+     */
+    private function update_record($payload) {
+      $connection = $this->get_connection();
+      $fields = [];
+
+      foreach ($payload as $key => $value) {
+        $fields["$key"] = $value;
+      }
+
+      $query = $connection->update('subscriptions_meta')
+        ->fields($fields)
+        ->condition('user_id', $this->currentUser->id(), '=')
+        ->execute();
+
+      if ($query) {
+        return $payload;
+      }
+      $message = [
+        'message' => 'Some error ocuured while inserting the record',
+      ];
+      return $message;
+    }
+
+
 
 }

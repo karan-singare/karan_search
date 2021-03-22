@@ -45,14 +45,33 @@
     // });
 
     /**
-     * Testing the POST request
+     * Testing the POST request for SubscriptionsRestResource
      */
     var csrf_token = "";
 
+    // const payload = {
+    //   "user_id": 3,
+    //   "tutor_id": 6,
+    //   "institute_id": 10,
+    // };
+    // const payload = {
+    //   "user_id": 6,
+    //   "free_tutors": 5,
+    //   "free_institutes": 5,
+    //   "tutors_start_time": 0,
+    //   "tutors_end_time": 0,
+    //   "institutes_start_time": 0,
+    //   "institutes_end_time": 0
+    // }
+
+    /**
+     * GET, POST and PUT are working fine
+     */
+
     const payload = {
-      "user_id" : 1,
-      "tutor_id" : 6,
-      "institute_id" : 10,
+      "free_tutors": 6,
+      "free_institutes": 5,
+      "tutors_start_time": 100
     };
 
     $.ajax({
@@ -62,8 +81,10 @@
       success: function(token) {
         csrf_token = token;
         $.ajax({
-          url: `/subscriptions`,
-          type: 'POST',
+          // url: `/subscriptions`,
+          url: `/subscriptions-meta`,
+          // type: 'POST',
+          // type: 'PUT',
           headers: {
             'X-CSRF-TOKEN': csrf_token,
             'Content-Type': 'application/json',
