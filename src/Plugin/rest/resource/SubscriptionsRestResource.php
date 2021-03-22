@@ -7,6 +7,7 @@ use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Drupal\Core\Database\Database;
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -60,6 +61,10 @@ class SubscriptionsRestResource extends ResourceBase {
             throw new AccessDeniedHttpException();
         }
 
+        $payload = $this->get_record();
+
+        // $payload = $message;
+
         return new ResourceResponse($payload, 200);
     }
 
@@ -103,6 +108,12 @@ class SubscriptionsRestResource extends ResourceBase {
         if (!$this->currentUser->hasPermission('access content')) {
             throw new AccessDeniedHttpException();
         }
+        // $payload = $this->insert_record($payload);
+
+        // $payload = [
+        //   'response' => "Request is coming",
+        // ];
+        $payload = $this->insert_record($payload);
 
         return new ModifiedResourceResponse($payload, 200);
     }
@@ -127,6 +138,43 @@ class SubscriptionsRestResource extends ResourceBase {
         }
 
         return new ModifiedResourceResponse($payload, 204);
+    }
+
+    private function get_connection() {
+      return  Database::getConnection();
+    }
+
+    private function get_record() {
+      $response = [];
+      $connection = $this->get_connection();
+
+      $query = $connection->select('subscriptions', 's')
+        ->fields('s')
+        ->condition('s.user_id', $this->currentUser->id(), '=');
+
+      $data = $query->execute();
+      $results = $data->fetchAll(\PDO::FETCH_ASSOC);
+      return $results;
+
+    }
+
+    private function insert_record($payload) {
+      $connection = $this->get_connection();
+      $query = $connection->insert('subscriptions')
+        ->fields([
+          'user_id' => $payload['user_id'],
+          'tutor_id' => $payload['tutor_id'],
+          'institute_id' => $payload['institute_id'],
+        ])
+        ->execute();
+
+      if ($query) {
+        return $payload;
+      }
+      $message = [
+        'message' => 'Some error ocuured while inserting the record"',
+      ];
+      return $message;
     }
 
 }

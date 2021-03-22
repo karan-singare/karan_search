@@ -27,24 +27,60 @@
   // });
   $(document).ready(() => {
     const user_id = parseInt($('#hidden_user_id')[0].value);
-    console.log(user_id);
+    // console.log(user_id);
+    //
+    // $.ajax({
+    //     type: 'GET',
+    //     url: `/user/${user_id}?_format=json`,
+    //     success: function(feedback) {
+    //       console.log(feedback);
+    //     }
+    // });
+    // $.ajax({
+    //     type: 'GET',
+    //     url: `/api/users`,
+    //     success: function(feedback) {
+    //       console.log(feedback);
+    //     }
+    // });
+
+    /**
+     * Testing the POST request
+     */
+    var csrf_token = "";
+
+    const payload = {
+      "user_id" : 1,
+      "tutor_id" : 6,
+      "institute_id" : 10,
+    };
 
     $.ajax({
-        type: 'GET',
-        url: `/user/${user_id}?_format=json`,
-        success: function(feedback) {
-          console.log(feedback);
-        }
-    });
-    $.ajax({
-        type: 'GET',
-        url: `/api/users`,
-        success: function(feedback) {
-          console.log(feedback);
-        }
+      url: `/rest/session/token`,
+      type: 'GET',
+
+      success: function(token) {
+        csrf_token = token;
+        $.ajax({
+          url: `/subscriptions`,
+          type: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': csrf_token,
+            'Content-Type': 'application/json',
+          },
+          dataType: 'json',
+          data: JSON.stringify(payload),
+
+          success: function(feedback) {
+            console.log(feedback);
+          }
+
+        });
+      }
     });
 
   })
+
 
 
 })(jQuery);
