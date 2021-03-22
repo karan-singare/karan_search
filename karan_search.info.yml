@@ -1,0 +1,5 @@
+name: Tutor and Institute Search Module
+description: The custom module for implementing the search functionalities for tutors and institutes alongwith payment integration
+core: 8.x
+type: module
+package: Custom

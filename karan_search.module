@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * Implements hook_theme
+ */
+function karan_search_theme($existing, $theme, $type, $path) {
+  return [
+    'search_tutors_page' => [
+      'variables' => [
+        'items' => [],
+        'title' => '',
+        'user_id' => '',
+      ]
+    ],
+    'search_institutes_page' => [
+      'variables' => [
+        'items' => [],
+        'title' => '',
+        'user_id' => '',
+      ]
+    ]
+  ];
+}

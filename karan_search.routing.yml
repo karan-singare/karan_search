@@ -1,0 +1,15 @@
+karan_search.searchTutorsPage:
+  path: '/search-tutors'
+  defaults:
+    _controller: '\Drupal\karan_search\Controller\SearchTutorsPageController::searchTutorsPage'
+    _title: 'Search Tutors Page'
+  requirements:
+    _permission: 'access content'
+
+karan_search.searchInstitutesPage:
+  path: '/search-institutes'
+  defaults:
+    _controller: '\Drupal\karan_search\Controller\SearchTutorsPageController::searchInstitutesPage'
+    _title: 'Search Institutes Page'
+  requirements:
+    _permission: 'access content'

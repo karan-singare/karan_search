@@ -1,0 +1,86 @@
+<?php
+function karan_search_schema() {
+  $schema['subscriptions'] = array(
+    'description' => 'The table to store the information about the subsription of tutors and institutes.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for the record.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'user_id' => array(
+        'description' => 'The user id of the user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'tutor_id' => array(
+        'description' => 'The id of the tutor to which the user is subscribed.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'institute_id' => array(
+        'description' => 'The id of the institute to which the user is subscribed.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => ['id'],
+  );
+
+  $schema['subscriptions_meta'] = array(
+    'description' => 'The table to store the additional information about the subsription of tutors and institute.',
+    'fields' => array(
+      'user_id' => array(
+        'description' => 'The user id of the user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'free_tutors' => array(
+        'description' => 'No. of free tutors remaining for the account.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 5,
+      ),
+      'free_institutes' => array(
+        'description' => 'No. of free institutes remaining for the account.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 5,
+      ),
+      'tutors_start_time' => array(
+        'description' => 'The of the first tutor subscribed.',
+        'type' => 'varchar',
+        'length' => 20,
+      ),
+      'tutors_end_time' => array(
+        'description' => 'The expiration date for the subscribed tutors.',
+        'type' => 'varchar',
+        'length' => 20,
+      ),
+      'institutes_start_time' => array(
+        'description' => 'The of the first institute subscribed.',
+        'type' => 'varchar',
+        'length' => 20,
+      ),
+      'institutes_end_time' => array(
+        'description' => 'The expiration date for the subscribed institutes.',
+        'type' => 'varchar',
+        'length' => 20,
+      ),
+    ),
+    'primary key' => ['user_id'],
+  );
+
+  return $schema;
+}
